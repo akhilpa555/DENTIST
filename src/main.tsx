@@ -17,7 +17,7 @@ try {
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/DENTIST">
       <App />
     </BrowserRouter>
   </React.StrictMode>,
