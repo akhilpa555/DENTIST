@@ -25,7 +25,8 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       <nav className="flex-1 px-1 space-y-2">
         <NavItem to="/" label="Dashboard" />
         <NavItem to="/appointments" label="Appointments" />
-        {user?.role !== 'patient' && <NavItem to="/patients" label="Patients" />}
+  {user?.role !== 'patient' && <NavItem to="/patients" label="Patients" />}
+  {user?.role !== 'patient' && <NavItem to="/inventory" label="Inventory" />}
         <NavItem to="/doctors" label="Doctors" />
         <NavItem to="/services" label="Services" />
         {user?.role !== 'patient' && <NavItem to="/billing" label="Billing" />}

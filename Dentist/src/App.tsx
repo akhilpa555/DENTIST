@@ -11,6 +11,7 @@ import Services from './pages/Services'
 import Billing from './pages/Billing'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
+import Inventory from './pages/Inventory'
 
 type PropsWithChildren = { children: React.ReactNode }
 
@@ -47,6 +48,14 @@ export default function App(): JSX.Element {
             element={
               <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
                 <Patients />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="inventory"
+            element={
+              <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
+                <Inventory />
               </RequireRole>
             }
           />
