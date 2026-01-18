@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { PATIENTS, DOCTORS, SERVICES } from '../services/mockData'
+import { DOCTORS, SERVICES, Appointment } from '../services/mockData'
 import { useAuth } from '../context/AuthContext'
 
 const STORAGE_KEY = 'clinic_demo_data'
@@ -10,21 +10,27 @@ type Props = {
 }
 
 export default function AppointmentForm({ initial, onSubmit }: Props) {
-  const [patientId, setPatientId] = useState(initial?.patientId ?? PATIENTS[0]?.id)
+  const initialPatients = (()=>{ try{ const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw).patients || [] }catch{} return [] })()
+  const [patients, setPatients] = useState<any[]>(initialPatients)
+  const [patientId, setPatientId] = useState<string>(initial?.patientId ?? initialPatients[0]?.id ?? '')
   const [doctorId, setDoctorId] = useState(initial?.doctorId ?? DOCTORS[0]?.id)
   const [date, setDate] = useState(initial ? new Date(initial.datetime).toISOString().slice(0,10) : new Date().toISOString().slice(0,10))
   const [slot, setSlot] = useState(initial ? new Date(initial.datetime).toISOString() : '')
   const [serviceIds, setServiceIds] = useState<string[]>(initial?.serviceIds ?? [SERVICES[0].id])
 
+  function readPatients(){ try{ const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw).patients || [] }catch{} return [] }
+
   useEffect(()=>{
-    if (!PATIENTS.length) setPatientId('')
+    // refresh local patients when form opens
+    setPatients(readPatients())
+    if (!patientId && readPatients().length) setPatientId(readPatients()[0].id)
   },[])
 
   const { user } = useAuth()
   useEffect(()=>{
     // if logged in as patient, lock patient selection to their own record (match by email)
     if (user?.role === 'patient'){
-      const me = PATIENTS.find(p=> p.email === user.email)
+      const me = readPatients().find((p:any)=> p.email === user.email)
       if (me) setPatientId(me.id)
     }
   },[user])
@@ -63,7 +69,8 @@ export default function AppointmentForm({ initial, onSubmit }: Props) {
       <div>
         <label className="block text-sm mb-1">Patient</label>
         <select className="w-full border p-2 rounded" value={patientId} onChange={e=>setPatientId(e.target.value)} disabled={user?.role==='patient'}>
-          {PATIENTS.map(p=> <option key={p.id} value={p.id}>{p.name}</option>)}
+          <option value="">Select</option>
+          {patients.map((p:any)=> <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
       </div>
       <div>

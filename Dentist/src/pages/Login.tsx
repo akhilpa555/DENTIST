@@ -27,7 +27,7 @@ export default function Login() {
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full border px-3 py-2 rounded mb-4" />
         <button className="w-full bg-blue-600 text-white py-2 rounded">Login</button>
         <div className="mt-4 text-xs text-gray-500">
-          Use admin@clinic.com / Admin@123 or doctor@clinic.com / Doctor@123 or staff@clinic.com / Staff@123
+          Use admin@clinic.com / Admin@123 or doctor@clinic.com / Doctor@123 or staff@clinic.com / Staff@123 or patient@clinic.com / Patient@123
         </div>
       </form>
     </div>

@@ -37,7 +37,7 @@ export default function Patients() {
   }
 
   const remove = (id:string) => {
-    const next = patients.filter(p=>p.id!==id)
+    const next = patients.filter((p: { id: string })=>p.id!==id)
     setPatients(next)
     persist(next)
   }

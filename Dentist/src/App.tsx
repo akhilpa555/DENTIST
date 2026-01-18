@@ -12,20 +12,22 @@ import Billing from './pages/Billing'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 
-function ProtectedRoute({ children }) {
+type PropsWithChildren = { children: React.ReactNode }
+
+function ProtectedRoute({ children }: PropsWithChildren) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/login" replace />
-  return children
+  return <>{children}</>
 }
 
-function RequireRole({ children, allowed }) {
+function RequireRole({ children, allowed }: { children: React.ReactNode; allowed: string[] }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/login" replace />
   if (!allowed.includes(user.role)) return <Navigate to="/" replace />
-  return children
+  return <>{children}</>
 }
 
-export default function App() {
+export default function App(): JSX.Element {
   return (
     <AuthProvider>
       <Routes>
@@ -40,28 +42,40 @@ export default function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="appointments" element={<Appointments />} />
-          <Route path="patients" element={
-            <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
-              <Patients />
-            </RequireRole>
-          } />
+          <Route
+            path="patients"
+            element={
+              <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
+                <Patients />
+              </RequireRole>
+            }
+          />
           <Route path="doctors" element={<Doctors />} />
           <Route path="services" element={<Services />} />
-          <Route path="billing" element={
-            <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
-              <Billing />
-            </RequireRole>
-          } />
-          <Route path="reports" element={
-            <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
-              <Reports />
-            </RequireRole>
-          } />
-          <Route path="settings" element={
-            <RequireRole allowed={[ 'admin' ]}>
-              <Settings />
-            </RequireRole>
-          } />
+          <Route
+            path="billing"
+            element={
+              <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
+                <Billing />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="reports"
+            element={
+              <RequireRole allowed={[ 'admin', 'doctor', 'receptionist' ]}>
+                <Reports />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <RequireRole allowed={[ 'admin' ]}>
+                <Settings />
+              </RequireRole>
+            }
+          />
         </Route>
       </Routes>
     </AuthProvider>

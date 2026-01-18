@@ -1,11 +1,14 @@
 import React from 'react'
 import { useAuth } from '../context/AuthContext'
 
-export default function Topbar() {
+export default function Topbar({ toggleSidebar, sidebarOpen }: { toggleSidebar?: () => void; sidebarOpen?: boolean }) {
   const { user, logout } = useAuth()
   return (
     <header className="topbar flex items-center justify-between p-4 bg-white">
       <div className="flex items-center gap-4">
+        {toggleSidebar && !sidebarOpen && (
+          <button onClick={toggleSidebar} className="p-2 rounded hover:bg-gray-100">☰</button>
+        )}
         <div className="text-lg font-semibold text-gray-700">Dashboard</div>
         <div className="text-sm text-gray-500">Good morning</div>
       </div>

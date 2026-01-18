@@ -8,11 +8,14 @@ const NavItem: React.FC<{ to: string; label: string }> = ({ to, label }) => (
   </NavLink>
 )
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const { user } = useAuth()
   return (
     <aside className="sidebar p-6 flex flex-col">
       <div className="flex items-center gap-3 mb-6">
+        {onClose && (
+          <button onClick={onClose} aria-label="Close sidebar" className="mr-2 w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">✕</button>
+        )}
         <img src="/src/assets/dental-logo.svg" alt="logo" className="w-10 h-10" />
         <div>
           <div className="font-bold text-lg">Bheemanady Dental Clinic BDC</div>
